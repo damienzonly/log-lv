@@ -1,0 +1,23 @@
+{
+    "name": "log-lv",
+    "version": "1.0.0",
+    "main": "dist/logger.js",
+    "types": "dist/logger.d.ts",
+    "repository": "https://github.com/damienzonly/log-lv",
+    "author": "damienzonly <damianomailswork@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "format": "prettier --write src/*",
+        "build": "tsc",
+        "precommit": "yarn format && yarn build"
+    },
+    "devDependencies": {
+        "prettier": "1.19.1",
+        "typescript": "3.8.2"
+    },
+    "files": [
+        "README.md",
+        "dist/*",
+        "package.json"
+    ]
+}
