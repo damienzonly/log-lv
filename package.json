@@ -1,6 +1,6 @@
 {
     "name": "log-lv",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "dist/logger.js",
     "types": "dist/logger.d.ts",
     "repository": "https://github.com/damienzonly/log-lv",
@@ -9,7 +9,8 @@
     "scripts": {
         "format": "prettier --write src/*",
         "build": "tsc",
-        "precommit": "yarn format && yarn build"
+        "precommit": "yarn format && yarn build",
+        "clean": "rm -rf node_modules dist"
     },
     "devDependencies": {
         "prettier": "1.19.1",

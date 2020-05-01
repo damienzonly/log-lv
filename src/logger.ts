@@ -22,35 +22,36 @@ export const LogLevel = {
 const isUndefined = v => v === undefined;
 const isNull = v => v === null;
 const isNil = v => isUndefined(v) || isNull(v);
-
+const noop = () => {};
 export interface ILoggerConf {
     /**
      * The returned value of this function will be printed as prefix
      */
-    prefix?: () => string | null;
+    prefix?: () => string;
     /**
      * The returned value of this function will be printed as suffix
      */
-    suffix?: () => string | null;
+    suffix?: () => string;
     /**
      * Separator string between the prefix and the message. If prefix is not provided this value will be ignored
      */
-    leftSeparator?: string | null;
+    leftSeparator?: string;
     /**
      * Separator string between the message and the suffix. If suffix is not provided this value will be ignored
      */
-    rightSeparator?: string | null;
+    rightSeparator?: string;
 }
 
 export class Logger {
-    private minLevel: number = LogLevel.none;
-    private maxLevel: number = LogLevel.debug;
+    private _minLevel: number = LogLevel[LevelStrings.NONE];
+    private _maxLevel: number = LogLevel[LevelStrings.DEBUG];
 
-    private level: number;
-    private conf: ILoggerConf;
+    private _level: number;
+    private _levelString: LevelString_t;
+    private _conf: ILoggerConf;
 
     constructor(levelName: LevelString_t, conf?: ILoggerConf) {
-        this.conf = this.buildConf(conf);
+        this._conf = this._buildConf(conf);
         if (typeof levelName !== "string" || !(levelName in LevelStrings)) {
             this.setLevel(LevelStrings.INFO);
         } else {
@@ -58,7 +59,7 @@ export class Logger {
         }
     }
 
-    private buildConf: (conf: ILoggerConf) => ILoggerConf = (conf?: ILoggerConf) => {
+    private _buildConf: (conf: ILoggerConf) => ILoggerConf = (conf?: ILoggerConf) => {
         return {
             prefix: conf?.prefix,
             suffix: conf?.suffix,
@@ -67,47 +68,49 @@ export class Logger {
         };
     };
 
-    private log = (lev: string, ...args: any[]) => {
-        const prefix = this.conf.prefix ? this.conf.prefix() : "";
-        const suffix = this.conf.suffix ? this.conf.suffix() : "";
-        const leftSeparator = prefix ? this.conf.leftSeparator : "";
-        const rightSeparator = suffix ? this.conf.rightSeparator : "";
+    private _messageParts = (_console: string, lev: LevelString_t) => {
+        const prefix = isNil(this._conf.prefix) ? "" : this._conf.prefix();
+        const suffix = isNil(this._conf.suffix) ? "" : this._conf.suffix();
+        const leftSeparator = prefix ? this._conf.leftSeparator : "";
+        const rightSeparator = suffix ? this._conf.rightSeparator : "";
         const left = `${prefix} ${leftSeparator}`.trim();
         const right = `${rightSeparator} ${suffix}`.trim();
         const tag = `[${lev.toUpperCase()}]`;
-        // prevent left padding when prefix is missing
-        console.log([left, tag, ...args, right].join(" ").trim());
+        return { prefix, suffix, leftSeparator, rightSeparator, left, right, tag };
     };
 
     public setLevel = (levelString: LevelString_t) => {
         const level = LogLevel[levelString];
-        const shouldSet = level >= this.minLevel && level <= this.maxLevel;
-        this.level = shouldSet ? level : LogLevel.info;
+        const shouldSet = level >= this._minLevel && level <= this._maxLevel;
+        this._level = shouldSet ? level : LogLevel.info;
+        this._levelString = levelString;
     };
 
-    public getLevel = () => this.level;
+    public getLevel = () => this._levelString;
 
     public disableLogging = () => {
         this.setLevel(LevelStrings.NONE);
     };
 
-    private genLog = (levelString: LevelString_t) => (...args: any[]) => {
+    private _wrapLog = (_console: string, levelString: LevelString_t) => (...args: any[]) => {
+        if (!args.length) return;
         const level = LogLevel[levelString];
-        if (this.level && level <= this.level) {
-            this.log(levelString, ...args);
+        if (this._level && level <= this._level) {
+            const { left, right, tag } = this._messageParts(_console, levelString);
+            // prevent left padding when prefix is missing
+            console[_console]([left, tag, ...args, right].join(" ").trim());
         }
     };
 
-    public setLevelNone = () => this.setLevel(LevelStrings.NONE);
     public setLevelError = () => this.setLevel(LevelStrings.INFO);
     public setLevelWarning = () => this.setLevel(LevelStrings.WARNING);
     public setLevelInfo = () => this.setLevel(LevelStrings.INFO);
     public setLevelVerbose = () => this.setLevel(LevelStrings.VERBOSE);
     public setLevelDebug = () => this.setLevel(LevelStrings.DEBUG);
 
-    public error = this.genLog(LevelStrings.ERROR);
-    public warning = this.genLog(LevelStrings.WARNING);
-    public info = this.genLog(LevelStrings.INFO);
-    public verbose = this.genLog(LevelStrings.VERBOSE);
-    public debug = this.genLog(LevelStrings.DEBUG);
+    public error = this._wrapLog("error", LevelStrings.ERROR);
+    public warning = this._wrapLog("warn", LevelStrings.WARNING);
+    public info = this._wrapLog("info", LevelStrings.INFO);
+    public verbose = this._wrapLog("info", LevelStrings.VERBOSE);
+    public debug = this._wrapLog("debug", LevelStrings.DEBUG);
 }

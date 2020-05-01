@@ -1,7 +1,6 @@
 # Log LV
 
-Javascript log level for both client and server 
-
+Log level for both client and server written in pure TypeScript
 
 # Usage
 ```typescript
@@ -32,8 +31,8 @@ The second (optional) parameter to be passed to the Logger constructor has the f
 |-|-|-|-|
 |prefix|`() => string`|The returned value of this function will be printed as prefix|""|
 |suffix|`() => string`|The returned value of this function will be printed as suffix|""|
-|leftSeparator|`string`|Separator string between the prefix and the message| "" |
-|leftSeparator|`string`|Separator string between the message and the suffix| "" |
+|leftSeparator|`string`|Separator string between the prefix and the message. If prefix is not provided this value will be ignored| "" |
+|leftSeparator|`string`|Separator string between the message and the suffix. If suffix is not provided this value will be ignored| "" |
 
 # API
 |Method| Type Definition | Description
