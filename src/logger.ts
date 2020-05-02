@@ -97,8 +97,10 @@ export class Logger {
         const level = LogLevel[levelString];
         if (this._level && level <= this._level) {
             const { left, right, tag } = this._messageParts(_console, levelString);
+            const parts = [left.trim(), tag.trim(), ...args, right.trim()];
+            if (!left) parts.shift();
             // prevent left padding when prefix is missing
-            console[_console]([left, tag, ...args, right].join(" ").trim());
+            console[_console](...parts);
         }
     };
 
