@@ -6,6 +6,9 @@ enum LevelStrings {
     VERBOSE = "verbose",
     DEBUG = "debug"
 }
+
+const _levelsNames = "error warning info verbose debug".split(" ");
+
 export type LevelString_t = "none" | "error" | "warning" | "info" | "verbose" | "debug";
 export type LogLevel_t = {
     [key in LevelString_t]: number;
@@ -52,10 +55,10 @@ export class Logger {
 
     constructor(levelName: LevelString_t, conf?: ILoggerConf) {
         this._conf = this._buildConf(conf);
-        if (typeof levelName !== "string" || !(levelName in LevelStrings)) {
+        if (typeof levelName !== "string" || _levelsNames.indexOf(levelName.toLowerCase()) === -1) {
             this.setLevel(LevelStrings.INFO);
         } else {
-            this.setLevel(LevelStrings[levelName]);
+            this.setLevel(LevelStrings[levelName.toUpperCase()]);
         }
     }
 
