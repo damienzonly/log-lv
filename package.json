@@ -7,9 +7,9 @@
     "author": "damienzonly <damianomailswork@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "format": "prettier --write src/*",
+        "format": "prettier --write .",
         "build": "tsc",
-        "precommit": "yarn format && yarn build",
+        "precommit": "yarn clean && yarn format && yarn build",
         "clean": "rm -rf node_modules dist"
     },
     "devDependencies": {
