@@ -20,5 +20,16 @@
         "README.md",
         "dist/*",
         "package.json"
+    ],
+    "keywords": [
+        "logging",
+        "log",
+        "log level",
+        "debug",
+        "info",
+        "warning",
+        "node",
+        "nodejs",
+        "browser"
     ]
 }
