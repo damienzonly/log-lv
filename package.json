@@ -30,6 +30,7 @@
         "warning",
         "node",
         "nodejs",
-        "browser"
+        "browser",
+        "typescript"
     ]
 }
