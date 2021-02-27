@@ -1,8 +1,8 @@
 {
     "name": "log-lv",
-    "version": "1.2.0",
-    "main": "dist/logger.js",
-    "types": "dist/logger.d.ts",
+    "version": "1.2.1",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "repository": "https://github.com/damienzonly/log-lv",
     "author": "damienzonly <damianomailswork@gmail.com>",
     "license": "MIT",
