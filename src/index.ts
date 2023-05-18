@@ -45,6 +45,14 @@ export interface ILoggerConf {
      * Separator string between the message and the suffix. If suffix is not provided this value will be ignored
      */
     rightSeparator?: string;
+    /**
+     * executing before logging to console
+     */
+    beforeLogging?: (parts?: string[]) => void;
+    /**
+     * executing before logging to console
+     */
+    afterLogging?: (parts?: string[]) => void;
 }
 
 export class Logger {
@@ -162,6 +170,8 @@ export class Logger {
         const { left, right, tag } = this.getLineParts(levelString);
         const rest = [tag, ...args, right];
         const parts = left ? [left, ...rest] : rest;
+        this.conf.beforeLogging?.(parts);
         console[consoleFn](...parts);
+        this.conf.afterLogging?.(parts);
     };
 }

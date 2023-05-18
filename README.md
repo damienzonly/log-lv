@@ -34,6 +34,8 @@ The second (optional) parameter to be passed to the Logger constructor has the f
 | suffix        | `() => string` | The returned value of this function will be printed as suffix                                             | ""            |
 | leftSeparator | `string`       | Separator string between the prefix and the message. If prefix is not provided this value will be ignored | ""            |
 | leftSeparator | `string`       | Separator string between the message and the suffix. If suffix is not provided this value will be ignored | ""            |
+| beforeLogging | `(parts) => void`       | Callback function executed before logging to console. An array of string parts used for logging the message will be passed as argument| ""            |
+| leftSeparator | `(parts) => void`       | Callback function executed after logging to console. An array of string parts used for logging the message will be passed as argument| ""            |
 
 # API
 
