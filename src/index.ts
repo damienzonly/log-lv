@@ -48,11 +48,11 @@ export interface ILoggerConf {
     /**
      * executing before logging to console
      */
-    beforeLogging?: (parts?: string[]) => void;
+    beforeLogging?: (parts?: string[], levelString?: LevelString, levelNumber?: number) => void;
     /**
      * executing before logging to console
      */
-    afterLogging?: (parts?: string[]) => void;
+    afterLogging?: (parts?: string[], levelString?: LevelString, levelNumber?: number) => void;
 }
 
 export class Logger {
@@ -170,8 +170,8 @@ export class Logger {
         const { left, right, tag } = this.getLineParts(levelString);
         const rest = [tag, ...args, right];
         const parts = left ? [left, ...rest] : rest;
-        this.conf.beforeLogging?.(parts);
+        this.conf.beforeLogging?.(parts, levelString, level);
         console[consoleFn](...parts);
-        this.conf.afterLogging?.(parts);
+        this.conf.afterLogging?.(parts, levelString, level);
     };
 }
