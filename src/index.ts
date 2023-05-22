@@ -136,6 +136,7 @@ export class Logger {
 
     protected applyConf(conf: ILoggerConf): ILoggerConf {
         return {
+            ...conf,
             prefix: conf?.prefix || noop,
             suffix: conf?.suffix || noop,
             leftSeparator: isNil(conf?.leftSeparator) ? "" : conf?.leftSeparator,
